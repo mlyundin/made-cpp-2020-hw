@@ -3,12 +3,15 @@
 
 typedef std::function<int (int)> Op;
 
-
-
 Op compose (size_t n, Op ops[]) {
-    /// Your code goes here.
-}
+    return [n, ops](int x) {
+          for (int i = n - 1; i >= 0; --i) {
+              x = ops[i](x);
+          }
 
+          return x;
+    };
+}
 
 int main () {
     /// Simple tests:
