@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <iostream>
-
+#include <memory>
 
 namespace task {
 
@@ -14,8 +14,24 @@ class SizeMismatchException : public std::exception {};
 
 
 class Matrix {
+    class Row {
+     public:
+        using Iterator = double* const;
+        Row(Iterator begin, Iterator end);
+        double& operator[](size_t col);
+        const double& operator[](size_t col) const;
 
-public:
+        Iterator begin();
+        Iterator end();
+
+        const Iterator begin() const;
+        const Iterator end() const;
+
+     private:
+        Iterator _begin, _end;
+    };
+
+ public:
 
     Matrix();
     Matrix(size_t rows, size_t cols);
@@ -27,8 +43,8 @@ public:
     void set(size_t row, size_t col, const double& value);
     void resize(size_t new_rows, size_t new_cols);
 
-    /* ??? */ operator[](size_t row);
-    /* ??? */ operator[](size_t row) const;
+    Row operator[](size_t row);
+    Row operator[](size_t row) const;
 
     Matrix& operator+=(const Matrix& a);
     Matrix& operator-=(const Matrix& a);
@@ -54,8 +70,18 @@ public:
     bool operator==(const Matrix& a) const;
     bool operator!=(const Matrix& a) const;
 
-    // Your code goes here...
+    auto getShape() const;
 
+ private:
+
+    auto getIdx(size_t row, size_t col) const;
+    void checkBounds(size_t row, size_t col) const;
+    void checkSizes(const Matrix& other) const;
+
+    template <class Op> Matrix& applyOp(const Matrix& other, Op op);
+
+    size_t _rows, _cols;
+    std::unique_ptr<double[]> _data;
 };
 
 
