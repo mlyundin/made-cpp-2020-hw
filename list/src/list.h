@@ -393,7 +393,8 @@ const T& list<T, Alloc>::front() const{
 
 template<class T, class Alloc>
 T& list<T, Alloc>::back() {
-    return *(--end());
+    auto it = end();
+    return *(--it);
 }
 
 template<class T, class Alloc>
@@ -423,17 +424,17 @@ typename list<T, Alloc>::const_iterator list<T, Alloc>::cend() const{
 
 template<class T, class Alloc>
 typename list<T, Alloc>::reverse_iterator list<T, Alloc>::rbegin() {
-    return {tail_.prev};
+    return reverse_iterator(tail_.prev);
 }
 
 template<class T, class Alloc>
 typename list<T, Alloc>::reverse_iterator list<T, Alloc>::rend() {
-    return {&head_};
+    return reverse_iterator(&head_);
 }
 
 template<class T, class Alloc>
 typename list<T, Alloc>::const_reverse_iterator list<T, Alloc>::crbegin() const{
-    return reverse_iterator {tail_.prev};
+    return reverse_iterator{tail_.prev};
 }
 
 template<class T, class Alloc>
